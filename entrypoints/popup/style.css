@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
+    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/** layout **/
+body {
+  width: 560px;
+  padding: 8px 8px 12px;
+  overflow: hidden;
+}
+.container {
+  height: auto;
+  min-height: 320px;
+  max-height: 560px;
+  display: flex;
+  flex-direction: column;
+}
+.main {
+  flex: 1 1 0%;
+  overflow: hidden;
+  overflow-y: auto;
+}
+
+/** components **/
+.tab-group-item {
+  @apply px-6 py-2 text-lg font-medium border-b-2 cursor-pointer transition-colors duration-200;
+}
+.tab-group-item.active {
+  @apply border-primary-500 text-primary-600 dark:text-primary-400;
+}
+.tab-group-item:not(.active) {
+  @apply border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300;
+}
+
+.tab-list .tab-item {
+  @apply relative flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-150 cursor-pointer;
+}
+.tab-list .tab-item-title {
+  @apply text-sm font-medium mr-12 truncate;
+}
+.tab-list .tab-item-meta {
+  @apply flex justify-between text-xs text-gray-500 dark:text-gray-400;
+}
+.tab-list .tab-item-domain {
+  @apply flex-1 mr-4 truncate;
+}
+/* .tab-list .tab-item-time {
+  @apply text-gray-400 dark:text-gray-500;
+} */
+.tab-list .tab-item-delete {
+  @apply absolute top-0 right-0 p-2 hidden text-gray-400 hover:text-red-500 dark:hover:text-red-400;
+}
+.tab-list .tab-item:hover .tab-item-delete {
+  @apply block;
+}
+
+.empty-content {
+  @apply pt-10 pb-4 text-center text-sm text-gray-400 dark:text-gray-600;
+}
+
+/* 滚动条样式 */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100 dark:bg-gray-800 rounded-lg;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 dark:bg-gray-600 rounded-lg transition-colors duration-200;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-400 dark:bg-gray-500;
+}
