@@ -48,7 +48,7 @@ export async function deleteTabItem<T extends TabType>(tabItem: TabItem<T>, tabT
 type TabDataCacheMap = { [K in TabType]: TabItem<K>[] }
 export function useTabsRender<T extends TabType>(
   activeTab: T,
-  render: (list: TabItem<T>[]) => void | Promise<void>
+  render: (list: TabItem<T>[], isSearch?: boolean) => void | Promise<void>
 ) {
   // 缓存 tab 数据
   let dataCache: TabDataCacheMap = {} as TabDataCacheMap
@@ -69,15 +69,17 @@ export function useTabsRender<T extends TabType>(
       //@ts-ignore
       dataCache[tab] = await tabsMap[tabType].loadTabs()
     }
-
-    const result = keyword
-      ? dataCache[tabType]?.filter(
-          (item) =>
-            item.title!.toLowerCase().includes(keyword) || item.url!.toLowerCase().includes(keyword)
-        )
-      : dataCache[tabType]
-    //@ts-ignore
-    await render(result, true)
+    // 支持多个关键词搜索
+    const keywords = keyword.toLowerCase().split(' ')
+    const result =
+      keywords.length > 0
+        ? dataCache[tabType]?.filter((item) => {
+            const title = item.title!.toLowerCase()
+            const url = item.url!.toLowerCase()
+            return keywords.every((keyword) => title.includes(keyword) || url.includes(keyword))
+          })
+        : dataCache[tabType]
+    await render(result as TabItem<T>[], true)
   }
 
   // 点击页签

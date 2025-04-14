@@ -8,7 +8,7 @@ import { TabCacheItem } from '@/utils/types'
 export default defineBackground(() => {
   //@see https://developer.chrome.com/docs/extensions/develop/concepts/activeTab
   // ;(browser.action ?? browser.browserAction).onClicked.addListener(async (tab) => {})
-  console.log('Hello background!', { id: browser.runtime.id })
+  // console.log('Hello background!', { id: browser.runtime.id })
 
   // 缓存tab信息
   const tabsCache: Record<string, TabCacheItem> = {}
