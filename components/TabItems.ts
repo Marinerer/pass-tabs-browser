@@ -30,7 +30,7 @@ export function setupTabItems(
   // 返回渲染函数 (多次调用)
   return <T extends TabType>(list: TabItem<T>[], isSearch: boolean = false) => {
     if (list.length === 0) {
-      emptyEl.textContent = isSearch ? '未匹配的结果' : '无页签数据'
+      emptyEl.textContent = isSearch ? 'No matched ...' : 'No data ...'
       emptyEl.style.display = 'block'
       itemsEl.style.display = 'none'
       return
@@ -39,7 +39,7 @@ export function setupTabItems(
       return `
         <div class="tab-item" data-item-id="${item.id}">
           <div class="flex-shrink-0 mr-3">
-              <img src="${item.favIconUrl}" alt="网站图标" class="w-6 h-6">
+              <img src="${item.favIconUrl}" alt="pass tabs" class="w-6 h-6">
           </div>
           <div class="flex-1 min-w-0">
               <h3 class="tab-item-title">${item.title}</h3>
