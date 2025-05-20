@@ -64,4 +64,14 @@ document.addEventListener('DOMContentLoaded', async function () {
     $search.dispatchEvent(new Event('input'))
     $search.focus()
   })
+  //添加全局键盘事件监听器
+  document.addEventListener('keydown', function (event) {
+    // 检查是否按下了 / 键，并且不是在输入框中（避免干扰用户输入）
+    if (event.key === '/' && document.activeElement !== $search) {
+      // 阻止默认行为（避免 / 字符被输入到搜索框）
+      event.preventDefault()
+      // 聚焦到搜索框
+      $search.focus()
+    }
+  })
 })
