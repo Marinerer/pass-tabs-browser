@@ -8,6 +8,10 @@ export default defineConfig({
     name: 'pass tabs', //页签时空门
     description: 'Quickly switch and manage recently visited browser tabs.', //快速切换和管理最近访问的浏览器页签
     permissions: ['storage', 'tabs', 'history'],
+    options_ui: {
+      page: 'entrypoints/options/options.html',
+      open_in_tab: true,
+    },
   },
   vite: () =>
     ({

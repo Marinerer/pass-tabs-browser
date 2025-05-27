@@ -36,10 +36,10 @@ body {
 
 /** components **/
 .tab-group-item {
-  @apply px-6 py-2 text-lg font-medium border-b-2 cursor-pointer transition-colors duration-200;
+  @apply px-4 py-2 text-lg font-medium border-b-2 cursor-pointer transition-colors duration-200;
 }
 .tab-group-item.active {
-  @apply border-primary-500 text-primary-600 dark:text-primary-400;
+  @apply border-primary-500 text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900/30;
 }
 .tab-group-item:not(.active) {
   @apply border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300;
@@ -49,7 +49,7 @@ body {
   @apply relative flex items-center p-3 bg-gray-50 dark:bg-gray-700 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-150 cursor-pointer;
 }
 .tab-list .tab-item-title {
-  @apply text-sm font-medium mr-12 truncate;
+  @apply text-sm font-medium mr-10 truncate;
 }
 .tab-list .tab-item-meta {
   @apply flex justify-between text-xs text-gray-500 dark:text-gray-400;

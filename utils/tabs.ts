@@ -8,7 +8,13 @@ import { closedTabHandlers } from '@/utils/closed'
 import { openedTabHandlers } from '@/utils/opened'
 import { todayTabHandlers } from '@/utils/today'
 
-const tabsMap: Record<TabType, TabItemsHandlers<TabType>> = {
+// Improved tabsMap typing
+interface SpecificTabHandlers {
+  closed: TabItemsHandlers<'closed'>;
+  opened: TabItemsHandlers<'opened'>;
+  today: TabItemsHandlers<'today'>;
+}
+const tabsMap: SpecificTabHandlers = {
   closed: closedTabHandlers,
   opened: openedTabHandlers,
   today: todayTabHandlers,
@@ -32,14 +38,16 @@ function getTabItemById(id: string, items: any[]) {
 
 export async function clickTabItem<T extends TabType>(tabItem: TabItem<T>, tabType: T) {
   try {
-    await tabsMap[tabType].clickItem(tabItem)
+    const handler = tabsMap[tabType] as TabItemsHandlers<T>; // Ensure specific handler type
+    await handler.clickItem(tabItem)
   } catch (err) {
     console.error(`[${tabType}TabItemClick]:`, err)
   }
 }
 export async function deleteTabItem<T extends TabType>(tabItem: TabItem<T>, tabType: T) {
   try {
-    await tabsMap[tabType].removeItem(tabItem)
+    const handler = tabsMap[tabType] as TabItemsHandlers<T>; // Ensure specific handler type
+    await handler.removeItem(tabItem)
   } catch (err) {
     console.error(`[${tabType}TabItemDelete]:`, err)
   }
@@ -56,18 +64,23 @@ export function useTabsRender<T extends TabType>(
   // 渲染 tab 列表
   const renderTabs = async (tabType: T) => {
     activeTab = tabType
-    //! WARN: 存在类型问题
-    dataCache[tabType] = (await tabsMap[tabType].loadTabs()) as unknown as TabDataCacheMap[T]
+    const handler = tabsMap[tabType] as TabItemsHandlers<T>;
+    const items: TabItem<T>[] = await handler.loadTabs();
+    // Explicitly cast dataCache for this assignment to satisfy TypeScript's understanding of TabDataCacheMap
+    (dataCache as Record<T, TabItem<T>[]>)[tabType] = items;
     await render(dataCache[tabType]!)
   }
 
   // 搜索页签
-  const searchTabs = async (keyword: string, tabType: TabType) => {
+  // Use the generic T from useTabsRender
+  const searchTabs = async (keyword: string, tabType: T) => { 
     if (typeof keyword !== 'string') return
 
     if (!dataCache[tabType]) {
-      //@ts-ignore
-      dataCache[tab] = await tabsMap[tabType].loadTabs()
+      const handler = tabsMap[tabType] as TabItemsHandlers<T>;
+      const items: TabItem<T>[] = await handler.loadTabs();
+      // Explicitly cast dataCache for this assignment
+      (dataCache as Record<T, TabItem<T>[]>)[tabType] = items;
     }
     // 支持多个关键词搜索
     const keywords = keyword.toLowerCase().split(' ')
