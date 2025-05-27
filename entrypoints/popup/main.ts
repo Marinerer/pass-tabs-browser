@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', async function () {
   const $list = document.querySelector('#tab-list') as HTMLElement
   const $search = document.querySelector('#search-input') as HTMLInputElement
   const $clearSearch = document.querySelector('#clear-search') as HTMLElement
+  const $optionsButton = document.querySelector('#options-button') as HTMLElement
 
   // 页签项点击/移除方法
   let onRemoveTabItem: any = null
@@ -74,4 +75,11 @@ document.addEventListener('DOMContentLoaded', async function () {
       $search.focus()
     }
   })
+
+  // "Open Options" button listener
+  if ($optionsButton) {
+    $optionsButton.addEventListener('click', () => {
+      browser.runtime.openOptionsPage()
+    })
+  }
 })

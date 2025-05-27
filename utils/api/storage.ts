@@ -10,11 +10,12 @@ class BrowserStorage {
   /**
    * 获取存储数据
    * @param key 键名
+   * @param area 存储区域，默认为 'local'
    * @returns 存储的值
    */
-  static async get<T = { [key: string]: any }>(key?: string): Promise<T> {
+  static async get<T = { [key: string]: any }>(key?: string, area: chrome.storage.AreaName = 'local'): Promise<T> {
     return new Promise((resolve, reject) => {
-      browser.storage.local.get(key ?? null, (result) => {
+      browser.storage[area].get(key ?? null, (result) => {
         if (browser.runtime.lastError) {
           reject(browser.runtime.lastError)
         } else {
@@ -32,10 +33,11 @@ class BrowserStorage {
    * 设置存储数据
    * @param key 键名
    * @param value 值
+   * @param area 存储区域，默认为 'local'
    */
-  static async set<T>(key: string, value: T): Promise<void> {
+  static async set<T>(key: string, value: T, area: chrome.storage.AreaName = 'local'): Promise<void> {
     return new Promise((resolve, reject) => {
-      browser.storage.local.set({ [key]: value }, () => {
+      browser.storage[area].set({ [key]: value }, () => {
         if (browser.runtime.lastError) {
           reject(browser.runtime.lastError)
         } else {
@@ -48,10 +50,11 @@ class BrowserStorage {
   /**
    * 删除存储数据
    * @param key 键名
+   * @param area 存储区域，默认为 'local'
    */
-  static async remove(key: string): Promise<void> {
+  static async remove(key: string, area: chrome.storage.AreaName = 'local'): Promise<void> {
     return new Promise((resolve, reject) => {
-      browser.storage.local.remove(key, () => {
+      browser.storage[area].remove(key, () => {
         if (browser.runtime.lastError) {
           reject(browser.runtime.lastError)
         } else {
@@ -63,10 +66,11 @@ class BrowserStorage {
 
   /**
    * 清空所有存储数据
+   * @param area 存储区域，默认为 'local'
    */
-  static async clear(): Promise<void> {
+  static async clear(area: chrome.storage.AreaName = 'local'): Promise<void> {
     return new Promise((resolve, reject) => {
-      browser.storage.local.clear(() => {
+      browser.storage[area].clear(() => {
         if (browser.runtime.lastError) {
           reject(browser.runtime.lastError)
         } else {
@@ -81,7 +85,7 @@ class BrowserStorage {
    * @param callback 回调函数
    */
   static onChanged(callback: ChangeCallback) {
-    chrome.storage.onChanged.addListener(callback)
+    browser.storage.onChanged.addListener(callback)
   }
 }
 
