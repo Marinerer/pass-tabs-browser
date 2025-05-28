@@ -81,3 +81,30 @@ export function transformTabItem<T extends TabType>(
     time: formatRelativeTime(data[timeKey] as number),
   }
 }
+
+export function uniqueItem<T extends Record<string, any>>(arr: T[], key: keyof T = 'id') {
+  if (!arr || !arr.length) return []
+
+  const result: T[] = []
+  const map = new Map()
+  for (const item of arr) {
+    if (!map.has(item[key])) {
+      map.set(item[key], true)
+      result.push(item)
+    }
+  }
+  return result
+}
+
+export function isLocalHost(url: string) {
+  try {
+    const { hostname, protocol } = new URL(url)
+    return (
+      ['localhost', '127.0.0.1', '0.0.0.0'].includes(hostname) ||
+      hostname.startsWith('192.168.') ||
+      protocol === 'file:'
+    )
+  } catch (error) {
+    return false
+  }
+}
