@@ -1,9 +1,9 @@
-import BrowserStorage from '../../../utils/api/storage'
+import BrowserStorage from '../../../utils/api/storage' // Reverted path
 import {
   COLOR_THEME_KEY,
   SETTINGS_MAX_STORED_TABS_KEY,
   SETTINGS_CHROME_SYNC_ENABLED_KEY,
-} from '../../../utils/const'
+} from '../../../utils/const' // Reverted path
 
 // Get DOM Elements
 const themeSelect = document.getElementById('theme') as HTMLSelectElement

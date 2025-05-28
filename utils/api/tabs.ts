@@ -5,9 +5,13 @@ class BrowserTabs {
    * @returns
    */
   static async create(tab: chrome.tabs.CreateProperties) {
-    return new Promise<chrome.tabs.Tab>((resolve) => {
-      browser.tabs.create(tab, (tab) => {
-        resolve(tab)
+    return new Promise<chrome.tabs.Tab>((resolve, reject) => {
+      browser.tabs.create(tab, (createdTab) => {
+        if (browser.runtime.lastError) {
+          reject(browser.runtime.lastError);
+        } else {
+          resolve(createdTab);
+        }
       })
     })
   }
@@ -18,9 +22,13 @@ class BrowserTabs {
    * @returns
    */
   static async query(queryInfo: chrome.tabs.QueryInfo = {}) {
-    return new Promise<chrome.tabs.Tab[]>((resolve) => {
+    return new Promise<chrome.tabs.Tab[]>((resolve, reject) => {
       browser.tabs.query(queryInfo, (tabs) => {
-        resolve(tabs)
+        if (browser.runtime.lastError) {
+          reject(browser.runtime.lastError);
+        } else {
+          resolve(tabs);
+        }
       })
     })
   }
@@ -31,9 +39,13 @@ class BrowserTabs {
    * @returns
    */
   static async remove(tabId: number) {
-    return new Promise<void>((resolve) => {
+    return new Promise<void>((resolve, reject) => {
       browser.tabs.remove(tabId, () => {
-        resolve()
+        if (browser.runtime.lastError) {
+          reject(browser.runtime.lastError);
+        } else {
+          resolve();
+        }
       })
     })
   }
@@ -45,9 +57,13 @@ class BrowserTabs {
    * @returns
    */
   static async update(tabId: number, updateProperties: chrome.tabs.UpdateProperties) {
-    return new Promise<chrome.tabs.Tab>((resolve) => {
-      browser.tabs.update(tabId, updateProperties, (tab) => {
-        resolve(tab!)
+    return new Promise<chrome.tabs.Tab>((resolve, reject) => {
+      browser.tabs.update(tabId, updateProperties, (updatedTab) => {
+        if (browser.runtime.lastError) {
+          reject(browser.runtime.lastError);
+        } else {
+          resolve(updatedTab!); // tab can be undefined if error, but lastError check handles it
+        }
       })
     })
   }

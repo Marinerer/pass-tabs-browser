@@ -2,12 +2,14 @@ import type { TabCacheItem, TabClosedData, TabItemData, TabItemsHandlers } from 
 import { TAB_CLOSED_KEY, MAX_TABS_COUNT } from './const'
 import StoreApi from './api/storage'
 import TabsApi from './api/tabs'
-import { randomId, transformTabItem } from './index'
+import { randomId, transformTabItem, isExtensionUrl } from './index' // Imported isExtensionUrl
 
 export const closedTabHandlers: TabItemsHandlers<'closed'> = {
   async loadTabs() {
     const data = await getClosedTabsFromStore()
+    // Sort by closedAt descending after transformation
     return data.map((item) => transformTabItem<'closed'>(item, 'closedAt'))
+               .sort((a, b) => b.closedAt! - a.closedAt!);
   },
 
   async clickItem(item): Promise<void> {
@@ -24,7 +26,9 @@ export const closedTabHandlers: TabItemsHandlers<'closed'> = {
  * @param tab 标签对象
  */
 export async function saveClosedTab(tab: TabCacheItem) {
-  if (!tab.url) return
+  if (!tab.url || isExtensionUrl(tab.url)) { // Added isExtensionUrl check
+    return;
+  }
 
   try {
     // 获取存储数据
@@ -41,10 +45,12 @@ export async function saveClosedTab(tab: TabCacheItem) {
     }
 
     // 添加到存储
-    tabs.unshift(newTab)
+    tabs.unshift(newTab);
+    // Sort by closedAt descending to ensure the slice keeps the newest
+    tabs.sort((a, b) => b.closedAt! - a.closedAt!);
     // 超过最大数量, 删除最早记录
     if (tabs.length > MAX_TABS_COUNT) {
-      tabs = tabs.slice(0, MAX_TABS_COUNT)
+      tabs = tabs.slice(0, MAX_TABS_COUNT);
     }
     // 更新存储
     await StoreApi.set(TAB_CLOSED_KEY, tabs)

@@ -12,12 +12,21 @@ export const todayTabHandlers: TabItemsHandlers<'today'> = {
 
   async clickItem(item) {
     if (item?.url) {
-      await TabsApi.create({ url: item.url })
+      try {
+        await TabsApi.create({ url: item.url });
+      } catch (e) {
+        console.error('[todayTabHandlers.clickItem]: Failed to create tab.', e);
+      }
     }
   },
 
   async removeItem(item) {
-    await HistoryApi.delete(item.url!)
+    if (!item.url) return; // Guard against missing URL
+    try {
+      await HistoryApi.delete(item.url!);
+    } catch (e) {
+      console.error('[todayTabHandlers.removeItem]: Failed to delete history.', e);
+    }
   },
 }
 
@@ -27,6 +36,20 @@ async function getTodayHistory() {
     text: '',
     startTime,
     maxResults: MAX_HISTORY_COUNT,
-  })
-  return history || []
+  });
+
+  if (!history || history.length === 0) {
+    return [];
+  }
+
+  // Deduplicate by URL, keeping the most recent visit
+  const uniqueTabs = new Map<string, chrome.history.HistoryItem>();
+  for (const item of history) {
+    if (!item.url) continue; // Skip items without URL for deduplication key
+    const existing = uniqueTabs.get(item.url);
+    if (!existing || (item.lastVisitTime && existing.lastVisitTime && item.lastVisitTime > existing.lastVisitTime)) {
+      uniqueTabs.set(item.url, item);
+    }
+  }
+  return Array.from(uniqueTabs.values());
 }

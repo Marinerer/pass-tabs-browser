@@ -28,6 +28,10 @@ class BrowserHistory {
   static async onRemoved(callback: (removed: chrome.history.RemovedResult) => void) {
     browser.history.onVisitRemoved.addListener(callback)
   }
+
+  static onVisited(callback: (result: chrome.history.HistoryItem) => void) { // Added this method
+    browser.history.onVisited.addListener(callback);
+  }
 }
 
 export default BrowserHistory
