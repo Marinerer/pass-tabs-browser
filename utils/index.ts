@@ -15,6 +15,19 @@ export const isExtensionUrl = (url: string) =>
   url.startsWith('about:') ||
   url.startsWith('view-source:')
 
+export function isLocalUrl(url: string) {
+  try {
+    const { hostname, protocol } = new URL(url)
+    return (
+      ['localhost', '127.0.0.1', '0.0.0.0'].includes(hostname) ||
+      hostname.startsWith('192.168.') ||
+      protocol === 'file:'
+    )
+  } catch (error) {
+    return false
+  }
+}
+
 /**
  * 转义HTML, 防止XSS攻击
  */
@@ -94,17 +107,4 @@ export function uniqueItem<T extends Record<string, any>>(arr: T[], key: keyof T
     }
   }
   return result
-}
-
-export function isLocalHost(url: string) {
-  try {
-    const { hostname, protocol } = new URL(url)
-    return (
-      ['localhost', '127.0.0.1', '0.0.0.0'].includes(hostname) ||
-      hostname.startsWith('192.168.') ||
-      protocol === 'file:'
-    )
-  } catch (error) {
-    return false
-  }
 }

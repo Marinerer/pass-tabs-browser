@@ -1,6 +1,6 @@
 import TabsApi from '@/utils/api/tabs'
 import WindowsApi from '@/utils/api/windows'
-import { isExtensionUrl } from '@/utils/index'
+import { isExtensionUrl, isLocalUrl } from '@/utils/index'
 import { saveClosedTab } from '@/utils/closed'
 
 import { TabCacheItem } from '@/utils/types'
@@ -15,16 +15,22 @@ export default defineBackground(() => {
 
   function setTabsCache(tab: Record<string, any> = {}) {
     if (!tab) return
-    const { url, title = 'Unkown', favIconUrl = '', windowId } = tab
-    // 只缓存非内部页面
-    if (url && !isExtensionUrl(url)) {
-      tabsCache[tab.id!] = {
-        url,
-        title,
-        favIconUrl,
-        windowId,
-      }
+
+    const { url, title = 'Unkown', favIconUrl = '', id, windowId } = tab
+    tabsCache[id!] = {
+      url,
+      title,
+      favIconUrl,
+      windowId,
     }
+  }
+
+  /**
+   * 无效的Tab
+   * 1.url存在; 2.非内部url; 3.非本地url
+   */
+  function invalidTab(tab: TabCacheItem) {
+    return !tab?.url || isExtensionUrl(tab.url) || isLocalUrl(tab.url)
   }
 
   // 缓存打开的所有tab信息
@@ -38,7 +44,9 @@ export default defineBackground(() => {
   })
   // 监听tab的更新
   TabsApi.onUpdated((tabId, changeInfo, tab) => {
-    setTabsCache(tab)
+    if (tabId && changeInfo?.status === 'complete') {
+      setTabsCache(tab)
+    }
   })
   // 监听tab的关闭事件
   TabsApi.onRemoved(async (tabId) => {
@@ -46,7 +54,7 @@ export default defineBackground(() => {
       const tabInfo = tabsCache[tabId] || {}
 
       // 过滤无效tab
-      if (!tabInfo.url || isExtensionUrl(tabInfo.url)) {
+      if (invalidTab(tabInfo)) {
         delete tabsCache[tabId]
         return
       }
@@ -66,7 +74,7 @@ export default defineBackground(() => {
     // 遍历并保存关闭的 tab 信息
     for (const [tabId, tabInfo] of tabs) {
       // 过滤无效tab
-      if (!tabInfo.url || isExtensionUrl(tabInfo.url)) {
+      if (invalidTab(tabInfo)) {
         delete tabsCache[tabId]
         continue
       }
