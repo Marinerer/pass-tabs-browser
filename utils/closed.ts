@@ -2,7 +2,7 @@ import type { TabCacheItem, TabClosedData, TabItemData, TabItemsHandlers } from 
 import { TAB_CLOSED_KEY, MAX_TABS_COUNT } from './const'
 import StoreApi from './api/storage'
 import TabsApi from './api/tabs'
-import { randomId, transformTabItem } from './index'
+import { randomId, transformTabItem, uniqueItem } from './index'
 
 export const closedTabHandlers: TabItemsHandlers<'closed'> = {
   async loadTabs() {
@@ -46,8 +46,8 @@ export async function saveClosedTab(tab: TabCacheItem) {
     if (tabs.length > MAX_TABS_COUNT) {
       tabs = tabs.slice(0, MAX_TABS_COUNT)
     }
-    // 更新存储
-    await StoreApi.set(TAB_CLOSED_KEY, tabs)
+    // 更新&去重
+    await StoreApi.set(TAB_CLOSED_KEY, uniqueItem(tabs, 'url'))
   } catch (e) {
     console.error('[saveClosedTab]:', e)
   }
