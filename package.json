@@ -2,7 +2,7 @@
   "name": "pass-tabs",
   "description": "manifest.json description",
   "private": true,
-  "version": "1.0.0",
+  "version": "0.0.3",
   "type": "module",
   "scripts": {
     "dev": "wxt",
@@ -12,16 +12,48 @@
     "zip": "wxt zip",
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
+    "test": "vitest",
+    "release": "bumpp",
     "postinstall": "wxt prepare"
   },
   "devDependencies": {
     "@types/chrome": "^0.0.280",
+    "@vitest/coverage-v8": "3.1.4",
     "autoprefixer": "^10.4.21",
+    "bumpp": "^10.1.1",
+    "changelogithub": "^13.15.0",
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.1",
     "typescript": "^5.6.3",
+    "vitest": "^3.1.4",
     "wxt": "^0.19.29"
   },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "changelogithub": {
+    "types": {
+      "feat": {
+        "title": "🎉 Features"
+      },
+      "fix": {
+        "title": "🐞 Bug Fixes"
+      },
+      "perf": {
+        "title": "🚀 Performance"
+      },
+      "docs": {
+        "title": "📝 Documentation"
+      },
+      "refactor": {
+        "title": "♻️ Code Refactoring"
+      }
+    }
+  },
+  "keywords": [],
+  "author": "Mariner <mengqing723@gmail.com>",
+  "license": "MIT",
   "pnpm": {
     "ignoredBuiltDependencies": [
       "dtrace-provider",
