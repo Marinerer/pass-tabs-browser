@@ -55,6 +55,11 @@ export interface TabItemsHandlers<T extends TabType> {
    */
   removeItem(item: TabItem<T>): Promise<void>
 }
+export interface TabItemsHandlerMap {
+  closed: TabItemsHandlers<'closed'>
+  opened: TabItemsHandlers<'opened'>
+  today: TabItemsHandlers<'today'>
+}
 
 export interface StorageData {
   [TAB_CLOSED_KEY]: TabClosedData[]
