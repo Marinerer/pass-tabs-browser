@@ -4,11 +4,9 @@ For quick switching and management of recently visited browser tabs, supporting 
 
 一个用于快速切换和管理最近访问浏览器标签页的扩展，支持 Chrome、Firefox 等主流浏览器。它帮助用户高效查找、分组和恢复历史标签页，提升浏览体验。
 
-> ♻️ **Undo:** Restore closed tabs
-> 🚀 **Opened:** Quickly switch to the open tab
+> ♻️ **Undo:** Restore closed tabs  
+> 🚀 **Opened:** Quickly switch to the open tab  
 > 🌐 **Today:** Quick overview of today's visits
-
-
 
 ## Features
 
@@ -16,8 +14,6 @@ For quick switching and management of recently visited browser tabs, supporting 
 - Tab grouping and management
 - Tab search support
 - Multi-browser support (Chrome, Firefox)
-
-
 
 ## Contribution Guide
 
