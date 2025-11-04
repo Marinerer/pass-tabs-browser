@@ -1,4 +1,4 @@
-import { TabType, TabItem, TabItemsHandlers, TabItemsHandlerMap } from '@/utils/types'
+import { TabType, TabItem, TabItemsHandlers, TabItemsHandlerMap, SortType } from '@/utils/types'
 import { TAB_CLOSED_KEY, DEFAULT_TAB_TYPE } from '@/utils/const'
 import StoreApi from '@/utils/api/storage'
 import HistoryApi from '@/utils/api/history'
@@ -7,6 +7,7 @@ import WindowsApi from '@/utils/api/windows'
 import { closedTabHandlers } from '@/utils/closed'
 import { openedTabHandlers } from '@/utils/opened'
 import { todayTabHandlers } from '@/utils/today'
+import { sortTabItems } from '@/utils/sort'
 
 const tabsMap: TabItemsHandlerMap = {
   closed: closedTabHandlers,
@@ -50,7 +51,8 @@ export async function deleteTabItem<T extends TabType>(tabItem: TabItem<T>, tabT
 type TabDataCacheMap = { [K in TabType]: TabItem<K>[] }
 export function useTabsRender<T extends TabType>(
   activeTab: T,
-  render: (list: TabItem<T>[], isSearch?: boolean) => void | Promise<void>
+  render: (list: TabItem<T>[], isSearch?: boolean) => void | Promise<void>,
+  getCurrentSortType: () => SortType
 ) {
   // 缓存 tab 数据
   let dataCache: TabDataCacheMap = {} as TabDataCacheMap
@@ -61,7 +63,10 @@ export function useTabsRender<T extends TabType>(
     const handler = tabsMap[tabType] as TabItemsHandlers<T>
     const items: TabItem<T>[] = await handler.loadTabs()
     ;(dataCache as Record<T, TabItem<T>[]>)[tabType] = items
-    await render(dataCache[tabType]!)
+    // 应用排序
+    const sortType = getCurrentSortType()
+    const sortedItems = sortTabItems(dataCache[tabType]!, sortType)
+    await render(sortedItems as TabItem<T>[])
   }
 
   // 搜索页签
@@ -83,7 +88,10 @@ export function useTabsRender<T extends TabType>(
             return keywords.every((keyword) => title.includes(keyword) || url.includes(keyword))
           })
         : dataCache[tabType]
-    await render(result as TabItem<T>[], true)
+    // 应用排序
+    const sortType = getCurrentSortType()
+    const sortedResult = sortTabItems(result as TabItem<T>[], sortType)
+    await render(sortedResult, true)
   }
 
   // 点击页签

@@ -1,25 +1,49 @@
-import type { SessionData, SessionTabData, TabItemsHandlers, AutoSaveSessionData } from './types'
 import StoreApi from './api/storage'
 import TabsApi from './api/tabs'
 import WindowsApi from './api/windows'
-import { randomId, isExtensionUrl, isLocalUrl, transformTabItem } from './index'
+import { randomId, isExtensionUrl, isLocalUrl, transformTabItem } from './helpers'
 
 const SESSIONS_KEY = 'pass_sessions' as const // Session集合存储键名
 const AUTO_SAVE_SESSION_KEY = 'pass_auto_save_session' as const // 自动保存的 Session 存储键名
 const AUTO_SAVE_INTERVAL = 5 * 60 * 1000 // 自动保存间隔(5分钟)
 
-export const sessionTabHandlers: TabItemsHandlers<'session'> = {
+// Session 相关类型定义
+export interface SessionTabData {
+  id: string
+  title: string
+  url: string
+  favIconUrl: string
+  windowId: number
+}
+
+export interface SessionData {
+  id: string
+  name: string
+  description?: string
+  createdAt: number
+  updatedAt: number
+  tabs: SessionTabData[]
+  windowsCount: number
+}
+
+export interface AutoSaveSessionData {
+  timestamp: number
+  tabs: SessionTabData[]
+  isAbnormalClose: boolean
+}
+
+export const sessionTabHandlers = {
   async loadTabs() {
     // Session 标签页由 Session 管理页面单独处理
     return []
   },
 
-  async clickItem(item): Promise<void> {
+  async clickItem(item: any): Promise<void> {
     // 打开单个标签
     await TabsApi.create({ url: item.url })
   },
 
-  async removeItem(item): Promise<void> {
+  async removeItem(item: any): Promise<void> {
     // Session 标签页的删除由 Session 管理页面处理
   },
 }

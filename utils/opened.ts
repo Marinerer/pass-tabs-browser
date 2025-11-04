@@ -1,7 +1,7 @@
 import TabsApi from './api/tabs'
 import WindowsApi from './api/windows'
 import type { TabItemsHandlers } from './types'
-import { transformTabItem } from './index'
+import { transformTabItem } from './helpers'
 
 export const openedTabHandlers: TabItemsHandlers<'opened'> = {
   async loadTabs() {

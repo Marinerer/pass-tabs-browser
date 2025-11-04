@@ -2,7 +2,7 @@ import type { TabCacheItem, TabClosedData, TabItemData, TabItemsHandlers } from 
 import { TAB_CLOSED_KEY, MAX_TABS_COUNT } from './const'
 import StoreApi from './api/storage'
 import TabsApi from './api/tabs'
-import { randomId, transformTabItem, uniqueItem } from './index'
+import { randomId, transformTabItem, uniqueItem } from './helpers'
 
 export const closedTabHandlers: TabItemsHandlers<'closed'> = {
   async loadTabs() {

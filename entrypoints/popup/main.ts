@@ -1,7 +1,8 @@
 import './style.css'
-import { TabItem, TabType } from '@/utils/types'
+import { TabItem, TabType, SortType } from '@/utils/types'
 import { useTheme } from '@/utils/theme'
 import { getTabType, setTabType, useTabsRender } from '@/utils/tabs'
+import { getSortType, setSortType } from '@/utils/sort'
 import { setupTabGroup } from '@/components/TabGroup'
 import { setupTabItems } from '@/components/TabItems'
 import addInputListener from 'kitify/addInputListener'
@@ -14,12 +15,17 @@ document.addEventListener('DOMContentLoaded', async function () {
   const $list = document.querySelector('#tab-list') as HTMLElement
   const $search = document.querySelector('#search-input') as HTMLInputElement
   const $clearSearch = document.querySelector('#clear-search') as HTMLElement
+  const $sortSelect = document.querySelector('#sort-select') as HTMLSelectElement
 
   // 页签项点击/移除方法
   let onRemoveTabItem: any = null
   let onCLickTabItem: any = null
   // 当前选中的标签
   let activeTab = (await getTabType()) || 'closed'
+  // 当前排序类型
+  let activeSortType: SortType = (await getSortType()) || 'recent'
+  // 设置下拉框的初始值
+  $sortSelect.value = activeSortType
 
   // 初始化主题
   useTheme($theme)
@@ -34,7 +40,8 @@ document.addEventListener('DOMContentLoaded', async function () {
   // 初始化标签页渲染函数
   const { renderTabs, searchTabs, clickTabItem, deleteTabItem } = useTabsRender(
     activeTab,
-    itemsRender
+    itemsRender,
+    () => activeSortType
   )
   onRemoveTabItem = deleteTabItem
   onCLickTabItem = clickTabItem
@@ -43,6 +50,14 @@ document.addEventListener('DOMContentLoaded', async function () {
     activeTab = code
     await setTabType(code)
     await renderTabs(code)
+  })
+
+  // 排序功能
+  $sortSelect.addEventListener('change', async function (this: HTMLSelectElement) {
+    activeSortType = this.value as SortType
+    await setSortType(activeSortType)
+    // 重新渲染当前标签页
+    await renderTabs(activeTab)
   })
 
   // 搜索功能

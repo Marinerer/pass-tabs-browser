@@ -2,7 +2,7 @@ import { MAX_HISTORY_COUNT } from './const'
 import HistoryApi from './api/history'
 import TabsApi from './api/tabs'
 import type { TabItemsHandlers } from './types'
-import { transformTabItem } from './index'
+import { transformTabItem } from './helpers'
 
 export const todayTabHandlers: TabItemsHandlers<'today'> = {
   async loadTabs() {

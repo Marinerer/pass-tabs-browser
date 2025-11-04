@@ -1,6 +1,6 @@
 import TabsApi from '@/utils/api/tabs'
 import WindowsApi from '@/utils/api/windows'
-import { isExtensionUrl, isLocalUrl } from '@/utils/index'
+import { isExtensionUrl, isLocalUrl } from '@/utils/helpers'
 import { saveClosedTab } from '@/utils/closed'
 
 import { TabCacheItem } from '@/utils/types'

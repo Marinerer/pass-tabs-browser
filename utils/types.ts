@@ -1,6 +1,7 @@
-import { TAB_CLOSED_KEY, TABS_MAP } from './const'
+import { TAB_CLOSED_KEY, TABS_MAP, SORT_OPTIONS } from './const'
 
 export type TabType = keyof typeof TABS_MAP
+export type SortType = keyof typeof SORT_OPTIONS
 
 // 临时存储的 tab 数据
 export interface TabCacheItem {

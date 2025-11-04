@@ -61,11 +61,22 @@
 
       <!-- 标签栏 -->
       <nav class="tab-group border-b border-gray-100 dark:border-gray-700">
-        <ul class="flex overflow-x-auto" id="tab-group">
-          <!-- <li class="tab-group-item active">Undo</li>
-        <li class="tab-group-item">Opened</li>
-        <li class="tab-group-item">Today</li> -->
-        </ul>
+        <div class="flex items-center justify-between">
+          <ul class="flex overflow-x-auto flex-1" id="tab-group">
+            <!-- <li class="tab-group-item active">Undo</li>
+          <li class="tab-group-item">Opened</li>
+          <li class="tab-group-item">Today</li> -->
+          </ul>
+          <div class="flex-shrink-0 px-4">
+            <select
+              id="sort-select"
+              class="sort-select text-sm bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-primary-500 focus:border-primary-500 dark:focus:ring-primary-500 dark:focus:border-primary-500 px-2 py-1">
+              <option value="recent">Recent</option>
+              <option value="domain">By domain</option>
+              <option value="alphabetical">Alphabetical</option>
+            </select>
+          </div>
+        </div>
       </nav>
 
       <!-- 标签列表 -->
