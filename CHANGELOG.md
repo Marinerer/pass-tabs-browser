@@ -1,5 +1,19 @@
 # pass-tabs
 
+## v1.2.0
+
+### &nbsp;&nbsp;&nbsp;🎉 Features
+
+- Add sorting functionality for TAB list &nbsp;-&nbsp; by **Mariner** [<samp>(de97e)</samp>](https://github.com/Marinerer/pass-tabs-browser/commit/de97e9d)
+- **session**: Add session module & window API &nbsp;-&nbsp; by **Mariner** [<samp>(2b2f1)</samp>](https://github.com/Marinerer/pass-tabs-browser/commit/2b2f102)
+
+### &nbsp;&nbsp;&nbsp;📝 Documentation
+
+- Update README &nbsp;-&nbsp; by **Mariner** [<samp>(655a5)</samp>](https://github.com/Marinerer/pass-tabs-browser/commit/655a5c4)
+
+##### &nbsp;&nbsp;&nbsp;&nbsp;[View changes on GitHub](https://github.com/Marinerer/pass-tabs-browser/compare/v1.1.0...v1.2.0)
+
+
 ## v1.1.0
 
 ### &nbsp;&nbsp;&nbsp;🚀 Performance
