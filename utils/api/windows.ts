@@ -41,6 +41,30 @@ class BrowserWindows {
     })
   }
 
+  static async create(createData: chrome.windows.CreateData): Promise<chrome.windows.Window> {
+    return new Promise((resolve, reject) => {
+      browser.windows.create(createData, (result) => {
+        if (browser.runtime.lastError) {
+          reject(browser.runtime.lastError)
+        } else {
+          resolve(result!)
+        }
+      })
+    })
+  }
+
+  static async getAll(): Promise<chrome.windows.Window[]> {
+    return new Promise((resolve, reject) => {
+      browser.windows.getAll({}, (windows) => {
+        if (browser.runtime.lastError) {
+          reject(browser.runtime.lastError)
+        } else {
+          resolve(windows)
+        }
+      })
+    })
+  }
+
   static onRemoved(callback: (windowId: number) => void) {
     browser.windows.onRemoved.addListener(callback)
   }
